@@ -1,6 +1,18 @@
 <?php 
 	include_once "includes/db.php";
 
+	// edit
+	if(isset($_GET['id'])){
+		$id = $_GET['id'];
+
+		$sql = "SELECT * FROM items WHERE id=$id";
+		$result = mysqli_query($conn, $sql);
+		$row =  mysqli_fetch_assoc($result);
+
+		echo $row['produto'];
+	}
+
+	// create
 	if (isset($_POST['submit'])) {
 		$product = $_POST['product'];
 		$quantity = $_POST['product-quantity'];

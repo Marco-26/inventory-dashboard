@@ -34,7 +34,7 @@
 
   $gains = 0;
   if ($rows > 0):
-    while ($row =  mysqli_fetch_assoc($result)):?>
+    while ($row = mysqli_fetch_assoc($result)):?>
       
       <?php
         $gains += $row['preço'] * $row['quantidade'];
@@ -46,7 +46,8 @@
         <td><?php echo $row['quantidade']; ?></td>
         <td><?php echo $row['fornecedor']; ?></td>
         <td><?php echo $row['preço']; ?></td>
-        <td><a href="includes/delete.inc.php?id=<?php echo $row['id'];?>" class="btn-red">Delete</a></td>
+        <td><a href="delete.inc.php?id=<?php echo $row['id'];?>" class="btn-del">Delete</a>
+        <a href="create.php?id=<?php echo $row['id'];?>" class="btn-edit">Update</a></td>
       </tr>
     <?php endwhile; 
           endif; ?>

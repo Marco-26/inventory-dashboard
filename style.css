@@ -15,7 +15,7 @@ td,
 th {
   border: 1px solid #dddddd;
   text-align: left;
-  padding: 8px;
+  padding: 10px;
 }
 
 tr:nth-child(even) {
@@ -33,18 +33,26 @@ a {
 
 .btn {
   background-color: #059862;
-  border: 1px solid #0a8f5e;
   color: white;
   padding: 7px;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.btn-red{
+.btn-del{
   background-color: #e25740;
-  border: 1px solid #c44b36;
   color: white;
-  padding: 7px;
+  font-size: 13px;
+  padding: 9px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-edit{
+  background-color: blue;
+  font-size: 13px;
+  color: white;
+  padding: 9px;
   border-radius: 5px;
   cursor: pointer;
 }
