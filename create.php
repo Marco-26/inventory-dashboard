@@ -1,15 +1,22 @@
 <?php 
 	include_once "includes/db.php";
 
+	$updating = false;
+
+	$row['produto'] = NULL;
+	$row['quantidade'] = NULL;
+	$row['fornecedor'] = NULL;
+	$row['preço'] = NULL;
+	
 	// edit
 	if(isset($_GET['id'])){
 		$id = $_GET['id'];
 
 		$sql = "SELECT * FROM items WHERE id=$id";
 		$result = mysqli_query($conn, $sql);
-		$row =  mysqli_fetch_assoc($result);
-
-		echo $row['produto'];
+		$row = mysqli_fetch_assoc($result);
+	
+		$updating = true;
 	}
 
 	// create
@@ -24,7 +31,12 @@
 			exit();
 		}
 		
-		$sql = "INSERT INTO items(produto, quantidade, fornecedor, preço) VALUES('$product', '$quantity', '$supplier', '$price')";
+		if($updating){
+			$sql = "UPDATE items SET produto='$product',quantidade='$quantity',fornecedor='$supplier',preco='$price' WHERE id=$id";
+		}
+		else{
+			$sql = "INSERT INTO items(produto, quantidade, fornecedor, preço) VALUES('$product', '$quantity', '$supplier', '$price')";
+		}
 
 		if(mysqli_query($conn, $sql)){
 			header("Location: ../index.php");
@@ -45,25 +57,27 @@
 </head>
 <body>
 	<div class="wrapper">
-	<h1>Adicionar Produto</h1>
+	
+	<h1><?php if($updating) echo "Atualizar produto"; else echo "Adicionar produto"?></h1>
+	
 	<form method="post" class="create-form">
 		<div class="create-form-input">
 			<label>Nome do produto:</label>
-			<input type="text" name="product">
+			<input type="text" name="product" value="<?php echo $row['produto']?>">
 		</div>
 		<div class="create-form-input">
 			<label for="product-quantity">Quantidade:</label>
-			<input type="number" name="product-quantity">
+			<input type="number" name="product-quantity" value="<?php echo $row['quantidade']?>">
 		</div>
 		<div class="create-form-input">
 			<label for="product-supplier">Fornecedor:</label>
-			<input type="text" name="product-supplier">
+			<input type="text" name="product-supplier" value="<?php echo $row['fornecedor']?>">
 		</div>
 		<div class="create-form-input">
 			<label for="product-price">Preço:</label>
-			<input type="number" name="product-price">
+			<input type="number" name="product-price" value="<?php echo $row['preço']?>">
 		</div>
-		<button type="submit" name="submit" class="btn">SAVE</button>
+		<button type="submit" name="submit" class="btn"><?php if($updating) echo "ATUALIZAR"; else echo "ADICIONAR"?></button>
 	</form>
 	<?php
 		$URL = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
