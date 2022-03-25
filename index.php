@@ -46,7 +46,7 @@ include_once "includes/db.php";
           <td><?php echo $row['quantidade']; ?></td>
           <td><?php echo $row['fornecedor']; ?></td>
           <td><?php echo $row['preço']; ?></td>
-          <td><a href="delete.inc.php?id=<?php echo $row['id']; ?>" class="btn-del">Delete</a>
+          <td><a href="includes/delete.inc.php?id=<?php echo $row['id']; ?>" class="btn-del">Delete</a>
             <a href="create.php?id=<?php echo $row['id']; ?>" class="btn-edit">Update</a>
           </td>
         </tr>

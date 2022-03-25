@@ -8,18 +8,26 @@
 	$row['fornecedor'] = NULL;
 	$row['preço'] = NULL;
 	
-	// edit
+	// get information based on id
 	if(isset($_GET['id'])){
-		$id = $_GET['id'];
+		$id_to_edit = $_GET['id'];
 
-		$sql = "SELECT * FROM items WHERE id=$id";
-		$result = mysqli_query($conn, $sql);
-		$row = mysqli_fetch_assoc($result);
-	
-		$updating = true;
+		$sql = "SELECT * FROM items WHERE id=?;";
+		$stmt = mysqli_stmt_init($conn);
+
+		if(!mysqli_stmt_prepare($stmt,$sql)){
+			echo "SQL Error";
+		}
+		else{
+			$updating = true;
+			mysqli_stmt_bind_param($stmt, "i", $id_to_edit);
+			mysqli_stmt_execute($stmt);
+			$result = mysqli_stmt_get_result($stmt);
+			$row = mysqli_fetch_assoc($result);
+		}
 	}
 
-	// create
+	// when submit button is clicked
 	if (isset($_POST['submit'])) {
 		$product = $_POST['product'];
 		$quantity = $_POST['product-quantity'];
@@ -32,17 +40,31 @@
 		}
 		
 		if($updating){
-			$sql = "UPDATE items SET produto='$product',quantidade='$quantity',fornecedor='$supplier',preco='$price' WHERE id=$id";
+			// edit item based on id
+			$sql = "UPDATE items SET produto=?,quantidade=?,fornecedor=?,preco=? WHERE id=?;";
+			$stmt = mysqli_stmt_init($conn);
+			if(!mysqli_stmt_prepare($stmt, $sql)){
+				echo "SQL error";
+			}
+			else{
+				mysqli_stmt_bind_param($stmt, "i", $id_to_edit);
+				mysqli_stmt_execute($stmt);
+				header("Location: ../index.php");
+			}
 		}
 		else{
-			$sql = "INSERT INTO items(produto, quantidade, fornecedor, preço) VALUES('$product', '$quantity', '$supplier', '$price')";
-		}
-
-		if(mysqli_query($conn, $sql)){
-			header("Location: ../index.php");
-		}
-		else{
-			echo 'Error';
+			// create one more item
+			// more safer way to work with database
+			$sql = "INSERT INTO items(produto, quantidade, fornecedor, preço) VALUES(?,?,?,?);";
+			$stmt = mysqli_stmt_init($conn);
+			if(!mysqli_stmt_prepare($stmt, $sql)){
+				echo "SQL error";
+			}
+			else{
+				mysqli_stmt_bind_param($stmt, "sisi", $product,$quantity,$supplier,$price);
+				mysqli_stmt_execute($stmt);
+				header("Location: ../index.php");
+			}
 		}
 	}
  ?>
